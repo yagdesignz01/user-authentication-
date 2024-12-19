@@ -2,24 +2,23 @@ import json
 import hashlib
 import os
 
-# Load or initialize users database
 try:
     with open("db.json") as db:
-        users: dict = json.loads(db.read())
+        users : dict = json.loads(db.read())
 except (FileNotFoundError, json.JSONDecodeError):
     users = {}
 
 def hash_password(password):
-    """Hashes a password using SHA-256."""
+    #hashing the password for security using SHA-256
     return hashlib.sha256(password.encode()).hexdigest()
 
 def is_valid_input(input_string):
-    """Validates that input contains no spaces."""
+    #Validates that input contains no spaces
     return " " not in input_string
 
 def save_users():
-    """Saves the users dictionary to the JSON file."""
-    if users:  # Save only if there is data
+    #saves the users dictioonary to the JSON file
+    if users:
         with open("db.json", "w") as db:
             json.dump(users, db, indent=4)
 
@@ -30,7 +29,7 @@ def register():
     if not username or not password:
         print("Username and password cannot be empty!")
         return
-
+    
     if not is_valid_input(username):
         print("Username can't contain spaces!")
         return
@@ -45,7 +44,8 @@ def register():
         users[username] = hash_password(password)
         print("User registered successfully!")
         save_users()
-
+    
+#login form for users
 def login():
     username = input("Enter your username: ").strip()
     password = input("Enter your password: ").strip()
@@ -57,7 +57,7 @@ def login():
     if not is_valid_input(password):
         print("Invalid password: spaces are not allowed!")
         return
-
+    
     if username in users:
         if users[username] == hash_password(password):
             print("Login successful!")
