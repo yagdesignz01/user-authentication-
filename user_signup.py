@@ -23,6 +23,8 @@ def save_users():
         with open("db.json", "w") as db:
             json.dump(users, db, indent=4)
 
+
+#Register foam 
 def register():
     username = input("Enter a username (no spaces allowed): ").strip()
     password = input("Enter a password (no spaces allowed): ").strip()
@@ -46,6 +48,8 @@ def register():
         print("User registered successfully!")
         save_users()
 
+
+#Login foam
 def login():
     username = input("Enter your username: ").strip()
     password = input("Enter your password: ").strip()
@@ -65,3 +69,26 @@ def login():
             print("Incorrect password!")
     else:
         print("Username does not exist!")
+
+#Recovery password
+def password_recovery():
+    username = input("Enter your username to recover your password: ").strip()
+
+    if username not in users:
+        print("Username not found!")
+        return
+
+    new_password = input("Enter a new password: ").strip()
+    if not new_password:
+        print("Password cannot be empty!")
+        return
+
+    if not is_valid_input(new_password):
+        print("Password can't contain spaces!")
+        return
+
+    users[username] = hash_password(new_password)
+    print("Password reset successfully!")
+
+    with open("db.json", "w") as db:
+        json.dump(users, db, indent=4)
